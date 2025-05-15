@@ -1,0 +1,105 @@
+Link of the image : github repository
+
+Simple Web Stack Infrastructure - Explanation
+
+Flow Description :
+When a user wants to access www.foobar.com:
+
+User types www.foobar.com in their browser
+DNS Query - Browser asks DNS server for IP address of www.foobar.com
+DNS Response - DNS returns 8.8.8.8 (the server IP)
+HTTP Request - Browser sends request to 8.8.8.8
+Processing - Server components work together to generate response
+HTTP Response - Complete website is sent back to user
+
+Infrastructure Components Explanation
+What is a Server?
+A server is a computer/machine that provides resources, data, services, or programs to other computers (clients) over a network. In this case, it's a physical or virtual machine hosting our entire web application.
+Role of Domain Name
+The domain name (foobar.com) serves as:
+
+Human-readable address for the website
+Alias for the IP address (8.8.8.8)
+Makes it easier for users to remember and access the site
+Provides branding identity
+
+DNS Record Type for "www"
+The "www" in www.foobar.com is a CNAME record (Canonical Name record):
+
+Subdomain of foobar.com
+Points to the same server as the main domain
+Could also be configured as an A record pointing directly to 8.8.8.8
+
+Role of Web Server (Nginx)
+The web server handles:
+
+- Receiving HTTP/HTTPS requests from browsers
+- Serving static content (HTML, CSS, JavaScript, images)
+- Acting as reverse proxy to application server
+- Load balancing (if multiple app servers existed)
+- SSL termination
+- Compression and caching
+
+Role of Application Server
+The application server:
+
+- Executes business logic and dynamic code
+- Processes user inputs and requests
+- Connects to database for data operations
+- Generates dynamic content
+- Handles user sessions and authentication
+- Runs the actual application (PHP, Python, Node.js, etc.)
+
+Role of Database (MySQL)
+The database:
+
+- Stores persistent data (user accounts, content, settings)
+- Provides data to application server when requested
+- Handles CRUD operations (Create, Read, Update, Delete)
+- Maintains data integrity and relationships
+- Supports queries and transactions
+
+Communication Protocol
+The server communicates with user's computer using:
+
+- HTTP/HTTPS protocol for web communication
+- TCP/IP as underlying transport protocol
+- Port 80 (HTTP) or 443 (HTTPS)
+
+Issues with This Infrastructure
+
+1. Single Point of Failure (SPOF)
+
+Problem: If the single server fails, entire website goes down
+Risk: Hardware failure, OS crash, power outage affects everything
+Impact: 100% downtime until server is restored
+
+2. Downtime During Maintenance
+
+Problem: Updates require restarting services
+Examples:
+
+- Deploying new code requires web server restart
+- Database updates may need MySQL restart
+- OS patches require server reboot
+
+Impact: Website unavailable during maintenance windows
+
+3. Cannot Scale with Traffic
+
+Problem: Fixed capacity limits
+Limitations:
+
+- CPU and RAM are fixed resources
+- Single database can become bottleneck
+- Network bandwidth is limited
+- Cannot handle traffic spikes effectively
+
+Result: Slow response times or complete failure under high load
+
+Additional Considerations
+
+- Security: Single server means all components share same security boundary
+- Backup: Need robust backup strategy since everything is in one place
+- Monitoring: Critical to monitor all components on single server
+- Performance: All services compete for same resources
