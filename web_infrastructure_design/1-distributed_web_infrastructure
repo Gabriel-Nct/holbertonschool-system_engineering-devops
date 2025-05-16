@@ -1,0 +1,116 @@
+Link of the image : https://drive.google.com/file/d/1aGDfSHJR_Pt9PKf5ER1F9GheM1SShQfK/view?usp=sharing
+
+Distributed Web Infrastructure - www.foobar.com
+Architecture Overview
+This three-server web infrastructure implements a distributed architecture with load balancing and database replication to improve reliability, performance, and availability.
+Infrastructure Components
+
+1. Load Balancer (HAProxy)
+
+Purpose: Distributes incoming requests across multiple servers
+Why added: Eliminates single point of failure, improves performance, enables horizontal scaling
+Configuration: Acts as the entry point for all web traffic
+
+2. Server 1 (Web Server)
+   Contains:
+
+Nginx (Web Server): Handles HTTP requests, serves static content
+Application Server: Processes business logic, dynamic content generation
+Application Files: Source code, configuration files
+MySQL Database (Primary): Master database handling write operations
+
+3. Server 2 (Web Server)
+   Contains:
+
+- Nginx (Web Server): Handles HTTP requests, serves static content
+- Application Server: Processes business logic, dynamic content generation
+- Application Files: Source code, configuration files
+- MySQL Database (Replica): Slave database handling read operations
+
+Load Balancer Configuration
+Distribution Algorithm
+Round Robin Algorithm:
+
+Requests are distributed sequentially to each server
+Server 1 → Server 2 → Server 1 → Server 2...
+Simple, fair distribution ensuring equal load
+
+Active-Active vs Active-Passive Setup
+This infrastructure uses Active-Active:
+
+Active-Active: Both servers simultaneously handle traffic
+
+Benefits: Better resource utilization, higher throughput
+Load is shared between both servers
+
+Active-Passive: One server active, one standby
+
+Benefits: Simpler failover, faster recovery
+Standby server only activates when primary fails
+
+Database Primary-Replica Cluster
+How It Works
+
+- Primary (Master) Node: Handles all write operations (INSERT, UPDATE, DELETE)
+- Replica (Slave) Node: Receives copied data from Primary, handles read operations
+- Replication Process: Primary logs changes → Replica applies changes asynchronously
+
+Primary vs Replica Differences
+Primary Node:
+
+Processes all write operations
+Source of truth for data
+Application writes go here
+
+Replica Node:
+
+- Read-only operations (SELECT queries)
+- Slightly behind Primary due to replication lag
+- Application reads can be distributed here for better performance
+
+Request Flow
+
+User enters www.foobar.com
+DNS resolves to Load Balancer IP
+Load Balancer receives request, applies Round Robin
+Selected Server processes request:
+
+Nginx handles HTTP request
+Application Server processes business logic
+Database query (read from Replica, write to Primary)
+
+Response sent back through Load Balancer to User
+
+Infrastructure Issues
+Single Points of Failure (SPOF)
+
+Load Balancer: If HAProxy fails, entire site becomes unreachable
+Primary Database: If Primary fails, no writes possible
+Network Connection: Single internet connection point
+
+Security Issues
+
+No Firewall: Servers exposed to direct external access
+No HTTPS: Data transmitted in plain text, vulnerable to interception
+No Authentication: No access control between components
+
+Monitoring Gaps
+
+- No Health Checks: Cannot detect server failures automatically
+- No Performance Monitoring: No visibility into response times, resource usage
+- No Log Aggregation: Difficult to troubleshoot issues across distributed servers
+
+Benefits of This Architecture
+
+- High Availability: Server redundancy reduces downtime risk
+- Load Distribution: Better performance under high traffic
+- Database Scalability: Read operations can be distributed
+- Easy Maintenance: Can update one server while other handles traffic
+
+Recommendations for Improvement
+
+- Add Load Balancer Redundancy: Implement HAProxy clustering
+- Implement Security: Add firewalls, SSL certificates, VPN
+- Add Monitoring: Implement health checks, performance monitoring, alerting
+- Database Backup: Automated backup and recovery procedures
+- Auto-failover: Automatic database failover mechanisms
