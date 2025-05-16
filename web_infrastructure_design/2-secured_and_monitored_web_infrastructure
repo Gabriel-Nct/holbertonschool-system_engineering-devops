@@ -1,0 +1,150 @@
+Link of the image : https://imgur.com/a/PT9u8Sm
+
+Secured and Monitored Web Infrastructure - www.foobar.com
+Architecture Overview
+
+This three-server web infrastructure implements comprehensive security through firewalls and SSL
+encryption, with robust monitoring across all components to ensure high availability and performance
+visibility.
+
+Infrastructure Components :
+
+1. Load Balancer with SSL Termination
+   SSL Certificate: Terminates HTTPS connections for www.foobar.com
+   HAProxy Configuration: Round robin load balancing
+   Why added: Centralized SSL management, reduced computational load on backend servers
+2. Three Firewalls
+   Firewall 1: Protects Load Balancer
+   Firewall 2: Protects Server 1
+   Firewall 3: Protects Server 2
+   Why added: Network security, traffic filtering, intrusion prevention
+3. Server 1 (Web Server)
+   Contains:
+   Nginx (Web Server): Handles HTTP requests
+   Application Server: Processes business logic
+   Application Files: Source code and configurations
+   MySQL Database (Primary): Master database for writes
+   Monitoring Client: Collects performance metrics
+4. Server 2 (Web Server)
+   Contains:
+   Nginx (Web Server): Handles HTTP requests
+   Application Server: Processes business logic
+   Application Files: Source code and configurations
+   MySQL Database (Replica): Slave database for reads
+   Monitoring Client: Collects performance metrics
+5. Load Balancer Monitoring
+   Monitoring Client: Tracks load balancer performance and health
+   Security Implementation
+   Firewalls Purpose
+6. Network Protection: Filter incoming/outgoing traffic based on rules
+7. Access Control: Block unauthorized access attempts
+8. DDoS Protection: Mitigate distributed denial of service attacks
+9. Port Management: Control which ports are open to external traffic
+   HTTPS Implementation
+   Why traffic is served over HTTPS:
+10. Data Encryption: Protects data in transit from eavesdropping
+11. Authentication: Verifies server identity to prevent man-in-the-middle attacks
+12. Data Integrity: Ensures data hasn't been tampered with during transmission
+13. SEO Benefits: Search engines favor HTTPS sites
+14. User Trust: Browser security indicators improve user confidence
+    SSL Certificate Details
+    Location: Installed on Load Balancer
+    Function: Encrypts traffic between users and load balancer
+    Coverage: Validates www.foobar.com domain
+
+Monitoring Implementation
+
+Purpose of Monitoring
+
+1. Performance Tracking: Monitor response times, throughput, resource usage
+2. Health Checks: Detect service failures and outages
+3. Capacity Planning: Identify resource bottlenecks before they impact users
+4. Security Monitoring: Detect unusual traffic patterns or attacks
+5. Compliance: Meet uptime and performance SLAs
+   How Monitoring Collects Data
+6. Agents: Monitoring clients installed on each server
+7. Metrics Collection: CPU, memory, disk, network utilization
+8. Log Aggregation: Application logs, error logs, access logs
+9. Real-time Streaming: Continuous data transmission to monitoring service
+10. API Polling: Regular health check endpoints
+    Monitoring Web Server QPS (Queries Per Second)
+
+Steps to monitor QPS:
+
+1. Configure Nginx Logging: Enable detailed access logs with timestamps
+2. Install Monitoring Agent: Deploy client to parse access logs
+3. Set Up Metrics: Configure QPS calculation based on log entries
+4. Dashboard Creation: Visualize QPS trends and spikes
+5. Alerting: Set thresholds for abnormal QPS values
+6. Real-time Monitoring: Use tools like:
+   Sumologic log analysis
+   New Relic APM
+   Datadog infrastructure monitoring
+   Prometheus + Grafana
+
+Request Flow
+
+1. User requests https://www.foobar.com
+2. DNS resolves to Load Balancer IP
+3. Firewall 1 filters incoming traffic
+4. Load Balancer terminates SSL, applies round robin
+5. Firewall 2/3 protect chosen server
+6. Selected Server processes request:
+   Nginx handles HTTP request
+   Application Server processes logic
+   Database query (read from Replica, write to Primary)
+7. Monitoring Clients collect metrics throughout
+8. Response sent back through same path (encrypted by LB)
+   Infrastructure Issues
+
+9. SSL Termination at Load Balancer
+   Problems:
+   Unencrypted Internal Traffic: Communication between LB and servers is plain HTTP
+   Security Gap: Internal network vulnerabilities expose unencrypted data
+   Compliance Issues: May not meet end-to-end encryption requirements
+   Man-in-the-Middle Risk: Internal attackers can intercept traffic
+   Better Approach: End-to-end SSL or SSL re-encryption to backend servers
+
+10. Single MySQL Write Server
+    Problems:
+    Single Point of Failure: Primary database failure stops all writes
+    Performance Bottleneck: All writes go through one server
+    No Write Scalability: Cannot distribute write load
+    Recovery Time: Failover process causes downtime
+    Better Approach: MySQL cluster with multiple masters or master-master replication
+
+11. Identical Server Components
+    Problems:
+    Resource Inefficiency: Database and web services compete for resources
+    Scaling Limitations: Cannot scale components independently
+    Maintenance Complexity: Updates affect multiple services simultaneously
+    Performance Impact: Database operations can slow web responses
+    Security Risks: Compromise of one service affects all others
+    Better Approach: Separate database servers, microservices architecture
+    Monitoring Metrics to Track
+    Infrastructure Metrics
+    CPU Utilization: Track processing load
+    Memory Usage: Monitor RAM consumption
+    Disk I/O: Database and log file performance
+    Network Traffic: Bandwidth utilization
+    Application Metrics
+    Response Time: Average request processing time
+    Error Rate: HTTP 4xx/5xx error percentage
+    Throughput: Requests per second
+    Database Queries: Query execution time and frequency
+    Security Metrics
+    Failed Login Attempts: Detect brute force attacks
+    Firewall Blocks: Monitor blocked traffic patterns
+    SSL Certificate Status: Track expiration dates
+    Anomalous Traffic: Identify unusual access patterns
+
+Recommendations for Improvement :
+
+1. Implement End-to-End SSL: Encrypt internal traffic
+2. Add Database Clustering: Multiple master nodes
+3. Separate Database Tier: Dedicated database servers
+4. Enhanced Monitoring: Add application performance monitoring (APM)
+5. Automated Failover: Implement database failover automation
+6. Log Management: Centralized logging with ELK stack
+7. Security Scanning: Regular vulnerability assessments
+8. Backup Strategy: Automated database and configuration backups
