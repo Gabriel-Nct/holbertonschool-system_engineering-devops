@@ -1,0 +1,38 @@
+Link of the image : https://imgur.com/MoYUAuh
+
+Scale Up Infrastructure Documentation
+Overview
+This documentation describes the scaled-up infrastructure that separates web servers, application servers, and database components across multiple servers, with HAProxy load balancing for high availability and improved performance.
+Architecture Components
+
+1. Load Balancer (HAProxy Cluster)
+
+Purpose: Distribute incoming traffic across multiple application servers
+Configuration: Cluster setup with redundancy
+Servers:
+
+Load Balancer 1 (Primary)
+Load Balancer 2 (Secondary/Backup)
+
+2. Web Servers
+
+Purpose: Serve static content (HTML, CSS, JavaScript, images)
+Technology: Nginx
+Count: 2 servers for redundancy
+Function: Handle static file requests and proxy dynamic requests to application servers
+
+3. Application Servers
+
+Purpose: Process business logic and dynamic content
+Technology: Gunicorn/uWSGI with Python/Django or similar
+Count: 2+ servers for load distribution
+Function: Handle API requests, session management, and application logic
+
+4. Database Server
+
+Purpose: Store and manage application data
+Technology: MySQL/PostgreSQL
+Configuration: Primary database with optional read replicas
+Function: Data persistence and retrieval
+
+Infrastructure Diagram
